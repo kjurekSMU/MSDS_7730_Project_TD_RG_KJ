@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Station Name:"
+            android:ems="10"
+            android:id="@+id/editTextName"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:ems="10"
+            android:id="@+id/editTextAddress" android:text="Address: "/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/editTextPrice" android:text="Price:"/>
+    <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/ratingBar"
+            android:max="5"
+            android:stepSize="1"/>
+    <Button
+            android:text="Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/buttonSave"/>
+
+    <Button
+            android:text="Find Stations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/nextPage"/>
+</LinearLayout>
+

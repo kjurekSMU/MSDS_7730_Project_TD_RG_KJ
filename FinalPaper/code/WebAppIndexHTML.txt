@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gas Station Project</title>
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/6.3.4/firebase-app.js"></script>
+
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/6.3.3/firebase-auth.js"></script>
+  <script defer src="/__/firebase/6.3.3/firebase-database.js"></script>
+  <script defer src="/__/firebase/6.3.3/firebase-messaging.js"></script>
+  <script defer src="/__/firebase/6.3.3/firebase-storage.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+
+  <style media="screen">
+    body {
+      background: #ECEFF1;
+      color: rgba(0, 0, 0, 0.87);
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #message {
+      background: white;
+      max-width: 360px;
+      margin: 100px auto 16px;
+      padding: 32px 24px;
+      border-radius: 3px;
+    }
+
+    #message h2 {
+      color: #ffa100;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    #message h1 {
+      font-size: 22px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 16px;
+    }
+
+    #message p {
+      line-height: 140%;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+
+    #message a {
+      display: block;
+      text-align: center;
+      background: #039be5;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    #message,
+    #message a {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+
+    #load {
+      color: rgba(0, 0, 0, 0.4);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      body,
+      #message {
+        margin-top: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      body {
+        border-top: 16px solid #ffa100;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="message">
+    <h2>Welcome to Finding the cheapest gas</h2>
+    <iframe src=
+    "https://www.google.com/maps/d/u/0/embed?mid=10HRl3h7TFWcfmgj03_hCgXQYe0qNGi49"
+      width="320"
+      height="480"></iframe>
+    <p>GAS STATION: <b>Chevron</b></p>
+    <!--<h1 id="ChevronHeader">CHEVRON: </h1>-->
+    <input type="textfield" id="textChevron" />
+    <button id="saveButtonChevron">Save</button>
+    <button id="loadButtonChevron">Load</button>
+    <p>GAS STATION: <b>Exxon</b></p>
+    <input type="textfield" id="textExxon" />
+    <button id="saveButtonExxon">Save</button>
+    <p>GAS STATION: <b>Sinclair</b></p>
+    <input type="textfield" id="textSinclair" />
+    <button id="saveButtonSinclair">Save</button>
+    <input type="textfield" id="textSinclairTimeStamp" />
+  </div>
+  <p id="load">Firebase SDK Loading&hellip;</p>
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // // The Firebase SDK is initialized and available here!
+      //
+      // firebase.auth().onAuthStateChanged(user => { });
+      // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+      // firebase.messaging().requestPermission().then(() => { });
+      // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+      //
+
+
+      try {
+        let app = firebase.app();
+        let features =
+          ['auth', 'database', 'messaging', 'storage'].filter(feature =>
+            typeof app[feature] === 'function');
+        document.getElementById('load').innerHTML =
+            `Firebase SDK loaded with ${features.join(', ')}`;
+
+        const config = {
+          apiKey: "AIzaSyBW8cyEkjFX4vx3DtU1pl3ZxLqCndM5zWg",
+          authDomain: "project-30a72.firebaseapp.com",
+          databaseURL: "https://project-30a72.firebaseio.com",
+          projectId: "project-30a72",
+          storageBucket: "project-30a72.appspot.com",
+          messagingSenderId: "500650925586",
+          appId: "1:500650925586:web:820ac7156cb03576"
+        };
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+        }
+
+        // Get a reference to the database service
+        var database = firebase.database();
+        getData();
+        streamData();
+
+      } catch (e) {
+        console.error(e);
+        document.getElementById('load').innerHTML =
+          'Error loading the Firebase SDK, check the console.';
+      }
+
+    });
+
+    savePriceChanges();
+
+    function getData() {
+
+      loadButtonChevron.addEventListener('click', function() {
+        return
+          firebase.database().ref('Stations/001').
+            once('value').then(function(snapshot) {
+          var priceChevron = (snapshot.val().Price && snapshot.val().Price)
+          textChevron.value = priceChevron;
+          console.log ("Chevron Price = " + priceChevron);
+          })
+      })
+    }
+
+    function streamData() {
+
+      firebase.database().ref('Stations/002/Price').on('value', snap => {
+
+        console.log("EXXON CHANGED TO:" + snap.val());
+        textExxon.value = snap.val();
+
+      });
+
+      firebase.database().ref('Stations/003/Price').on('value', snap => {
+
+        console.log("SINCLAIR CHANGED TO:" + snap.val());
+        textSinclair.value = snap.val();
+
+      });
+
+      firebase.database().ref('Stations/003/Time').on('value', snap => {
+
+        console.log("SINCLAIR CHANGED TO:" + snap.val());
+        textSinclairTimeStamp.value = snap.val();
+
+      });
+
+    }
+
+    function savePriceChanges(){
+
+        saveButtonChevron.addEventListener('click', function() {
+          var timestamp = firebase.database.ServerValue.TIMESTAMP;
+          const docRef = firebase.database().ref('Stations/001');
+          const textToSave = textChevron.value;
+
+          console.log("CHEVRON NEW PRICE: " + textToSave)
+          firebase.database().ref('Stations/001').set({
+            Name: 'Chevron',
+            Price: textToSave,
+            Time: timestamp
+          }).then(function() {
+            console.log("Status saved!");
+          }).catch(function(error) {
+            console.log("YOU HAVE AN ERROR: ", error);
+          });
+        })
+
+        saveButtonExxon.addEventListener('click', function() {
+          var timestamp = firebase.database.ServerValue.TIMESTAMP;
+          const docRef = firebase.database().ref('Stations/002');
+          const textToSave = textExxon.value;
+
+          console.log("EXXON NEW PRICE: " + textToSave)
+          firebase.database().ref('Stations/002').set({
+            Name: 'Exxon',
+            Price: textToSave,
+            Time: timestamp
+          }).then(function() {
+            console.log("Status saved!");
+          }).catch(function(error) {
+            console.log("YOU HAVE AN ERROR: ", error);
+          });
+        })
+
+        saveButtonSinclair.addEventListener('click', function() {
+          var timestamp = firebase.database.ServerValue.TIMESTAMP;
+          const docRef = firebase.database().ref('Stations/003');
+          const textToSave = textSinclair.value;
+
+          console.log("SINCLAIR NEW PRICE: " + textToSave)
+          firebase.database().ref('Stations/003').set({
+            Name: 'Sinclair',
+            Price: textToSave,
+            Time: timestamp
+          }).then(function() {
+            console.log("Status saved!");
+          }).catch(function(error) {
+            console.log("YOU HAVE AN ERROR: ", error);
+          });
+        })
+
+    }
+
+  </script>
+</body>
+
+</html>
