@@ -1,0 +1,44 @@
+package com.example.firebaseauthactivity;
+
+public class readGas {
+    private String address;
+    private String name;
+    private String price;
+
+
+    public readGas() {
+    }
+
+    public readGas(String address, String name, String price) {
+        this.address = address;
+        this.name = name;
+        this.price = price;
+
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+
+}
